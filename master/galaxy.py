@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 #######################################################
-# main.py - main game portion
+# galaxy.py - Generates the known chunk of galaxy.
 # Authors : Justin Sweitzer, Ben Sweitzer
 # Started development 04/04/2013
-# Version 0.1a
+# Version 0.1
 #
 #######################################################
 
