@@ -1,3 +1,10 @@
+#######################################################
+# components.py - Collection of classes describing ship components
+# Authors : Justin Sweitzer, Ben Sweitzer
+# Started development 04/04/2013
+# Version 0.1
+#
+#######################################################
 
 class WarpCore():
     def __init__(self,Type):
