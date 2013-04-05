@@ -25,12 +25,14 @@ class Planet():
         self.Hydrocarbons=0
         self.Water=0
         self.Silicon=0
+        self.Inhabitable=0
         self.Size=1
         
     def SetPlanetSize(self,PlanetSize):
         self.Size=PlanetSize
         
     def SetResource(self,resource):
+        
         if resource == 'Hydrocarbons':
             self.Hydrocarbons = (random.randint(1,10))
         elif resource == 'Titanium':
@@ -41,8 +43,14 @@ class Planet():
             self.Water = (random.randint(1,10))
         elif resource == 'Silicon':
             self.Silicon = (random.randint(1,10))
+        elif resource == 'Inhabitable':
+            self.Inhabitable = 1
+        
         else:
             pass
+        
+    def GetResourceList(self):
+        return(('Uranium',self.Uranium,'Titanium',self.Titanium,'Water',self.Water,'Hydrocarbons',self.Hydrocarbons,'Silicon',self.Silicon,'Inhabitable', self.Inhabitable))
         
 class Star():
     """Star is a class to represent a solar system. It will comprise one star and a random number of instances of 'Planet'"""
@@ -87,15 +95,19 @@ class GalaxyChunk():
     def __init__(self):
         bbox = ((-100000,-100000,-100000),(100000,100000,100000))       # The galaxy chunk is bounded by a 100,000 light year cube
         self.Earth = (0,0,0)                                            # Earth, of course, is the reference point within the cube.
-        self.numStars = 150                                                  # Number of stars to fill the void with
+        self.numStars = 150                                             # Number of stars to fill the void with
         
         self.StarList = [ Star('test',bbox) for i in range(0,self.numStars) ]
+        self.TotalNumPlanets = sum(self.StarList[i].GetNumPlanets() for i in range(0,self.numStars))
+        self.SeedStarList()
+    
+    def __getitem__(self,i):
+        return(self.StarList[i])                                         # hoping this means I can call a planet by galaxy[i][j]
         
-    def SeedStarList(self,numStars):
-        """ This method should seed the star list with planets and resources. I am giving each star between 1 and 12 planets.
-        Because of the way I am wanting to do this (simple), it is possible that more 'resource planets' can be assigned to a 
-        system than the number of planets in that system.  To counter that, I want to just assign multiple resources to individual
-        planets. """
+    def SeedStarList(self):
+        """ This method seeds the planet instances with resources"""
+        
+        resdict = {1: 'Inhabitable', 2: 'Uranium', 3: 'Water', 4: 'Titanium', 5: 'Hydrocarbons', 6: 'Silicon'}
         
         InhabitablePlanets = []
         UraniumPlanets = []
@@ -104,13 +116,36 @@ class GalaxyChunk():
         HydrocarbonPlanets = []
         SiliconPlanets = []
         
-        numInhabitablePlanets = numStars / 30
-        numUraniumPlanets = numStars / 4
-        numTitaniumPlanets = numStars / 2
-        numWaterPlanets = numStars
-        numHydrocarbonPlanets = numStars / 2
-        numSiliconPlanets = numStars
+        numInhabitablePlanets = self.numStars / 30
+        numUraniumPlanets = self.numStars / 4
+        numTitaniumPlanets = self.numStars / 2
+        numWaterPlanets = self.numStars
+        numHydrocarbonPlanets = self.numStars / 2
+        numSiliconPlanets = self.numStars
+        
+        samp_range = set((1,2,3,4,5))
+        
+        for i in range(0,self.numStars):           
+            for j in range(0,self[i].GetNumPlanets()):
+                
+                if numInhabitablePlanets+numWaterPlanets+numHydrocarbonPlanets+numTitaniumPlanets+numUraniumPlanets+numSiliconPlanets == 0:
+                    break
+                if numInhabitablePlanets == 0:
+                    samp_range -= set((1,0))
+                if numUraniumPlanets == 0:
+                    samp_range -= set((2,0))
+                if numWaterPlanets == 0:
+                    samp_range -= set((3,0))
+                if numTitaniumPlanets == 0:
+                    samp_range -= set((4,0))
+                if numSiliconPlanets == 0:
+                    samp_range -= set((5,0))
+                luckynum = random.sample(samp_range,1)[0]
+                self[i][j].SetResource(resdict[luckynum])
 
+                    
+  
+            
 
                 
             
