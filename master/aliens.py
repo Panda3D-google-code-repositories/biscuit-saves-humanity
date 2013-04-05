@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+#######################################################
+# aliens.py - Alien species descriptions.
+# Authors : Justin Sweitzer, Ben Sweitzer
+# Started development 04/04/2013
+# Version 0.1
+#
+#######################################################
+
 import random
 
 class Alien():
