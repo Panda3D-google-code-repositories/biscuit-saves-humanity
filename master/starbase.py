@@ -1,3 +1,10 @@
+#######################################################
+# starbase.py - Descriptions of all starbases.
+# Authors : Justin Sweitzer, Ben Sweitzer
+# Started development 04/04/2013
+# Version 0.1
+#
+#######################################################
 
 class StarBase():
     pass
