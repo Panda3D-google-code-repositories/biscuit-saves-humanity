@@ -1,0 +1,6 @@
+Name=Lagrangians
+Hostility=60
+TradeResources=titanium,uranium
+TradeComponents=Laser,WarpCore
+FriendlyGreeting=Hello, we are the Lagrangians.\n Please stay awhile, and be peaceful.
+AngryGreeting=You have angered us deeply.\n We are wary of your presence.
