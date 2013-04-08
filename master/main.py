@@ -17,3 +17,10 @@ sys.path.append('./ships')
 sys.path.append('./galaxy')
 
 import random, aliens, galaxy, starbase, ships, components
+
+g=galaxy.GalaxyChunk()
+alienList=[]
+for file in os.listdir('.'):
+    if '.alien' in file:
+        alienList.append(aliens.Alien(g.StarList,file))
+        
