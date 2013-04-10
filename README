@@ -1,0 +1,13 @@
+﻿Current state:
+
+	Right now this is still in the very early stages, and we are doing a lot of learning moving forward. We are not yet, nor are we ever likely to be, 'good' programmers. 
+
+To make this work, you need python installed on your system. 
+
+Start python from the master directory, where main.py is located.
+
+From the python prompt, type 'from main import *'
+
+Then type 'ship.WarpToSystem(g[1],9.9)'. This should take you to some random star system. Type 'ship.System.Probe()', and you will get a list of resources on each planet in the system, if it is uninhabited. Otherwise you will get an alien species name and either 'Homeworld' or 'Colony'. 
+
+Hopefully, we will figure out graphics next.

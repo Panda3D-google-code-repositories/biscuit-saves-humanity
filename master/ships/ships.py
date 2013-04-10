@@ -10,6 +10,9 @@
 
 import components, time
 
+class Fighter():
+    pass
+
 class CapitalShip():
     def __init__(self, VesselClass):
         if VesselClass == 'Explorer':  
@@ -21,10 +24,13 @@ class CapitalShip():
             WarpEngines = 1
             enginetype = 'Nuclear'
             coretype = 'EM'
-           
+            HitPoints = 20
+        self.HitPoints = HitPoints
+  #      self.MainGunPower = 
+        self.Class = VesselClass   
         self.MaxChassis = chas
         self.CurrentChassis = chas
-        #self.Fighters = Fighters
+  #      self.Fighters = Fighters
   #      self.WarpCores = [ components.WarpCore(coretype) for i in range(0,WarpCores) ]
   #      self.WarpEngines = [ components.WarpEngine(enginetype) for i in range(0,WarpEngines) ]
   #      self.PowerConsumption = sum(((self.WarpEngines[i].PowerConsumption*i^2) for i in range(0,WarpEngines)))
@@ -51,11 +57,6 @@ class CapitalShip():
             self.System = System
             self.Coordinates = self.System.Coordinates
             
-        
-        
-
-class Fighter():
-    pass
 
 class Frigate():
     pass
