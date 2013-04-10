@@ -8,7 +8,7 @@
 #######################################################
 
 
-import sys
+import sys, os
 
 sys.path.append('./rendering')
 sys.path.append('./bases')
@@ -18,9 +18,11 @@ sys.path.append('./galaxy')
 
 import random, aliens, galaxy, starbase, ships, components
 
-g=galaxy.GalaxyChunk()
+g=galaxy.GalaxyChunk('./galaxy/StarNames.stars')
 alienList=[]
-for file in os.listdir('.'):
+for file in os.listdir('./aliens/'):
     if '.alien' in file:
-        alienList.append(aliens.Alien(g.StarList,file))
-        
+        alienList.append(aliens.Alien(g.StarList,'./aliens/'+file))
+ship = ships.CapitalShip('Explorer')
+       
+

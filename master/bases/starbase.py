@@ -10,7 +10,7 @@ class StarBase():
     pass
 
 
-    
+   
 """ StarBase should have attributes that include hipoints, armaments, fleet vessels, etc.
  Keeping it simple, one StarBase represents alien presence in a star system. No need to worry
  about individual planets, except for resource harvesting. Player should be able to see the resources

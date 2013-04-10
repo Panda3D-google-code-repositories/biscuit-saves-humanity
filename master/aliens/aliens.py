@@ -49,7 +49,7 @@ class Alien():
                 self.FriendlyGreeting.append(line.strip().split('=')[1])
             elif 'AngryGreeting' in line:
                 self.AngryGreeting.append(line.strip().split('=')[1])
-            else: 
+            else:
                 pass
        
     def SetNumberofColonies(self,numColonies):
@@ -58,9 +58,9 @@ class Alien():
         DistanceList = self.HomeStar.DistanceList[1:]
         for i in range(0,numColonies):
                                     #  Star ID number,   Star Object
-            self.ColonySystems.append([DistanceList[i][1],DistanceList[i][2]])  # Hopefully these are the X closest systems       
+            self.ColonySystems.append([DistanceList[i][1],DistanceList[i][2]])  # Hopefully these are the X closest systems      
             DistanceList[i][2].SetInhabitants(self.Name,'Colony %i' % (i))
-            
+           
     def PlayerInteraction(self,interaction):
         if interaction == 'Neutral Space Combat' or interaction == 'Destroyed Alien Ship':
             self.Hostility += 1

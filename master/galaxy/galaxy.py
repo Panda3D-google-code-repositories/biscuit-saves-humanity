@@ -1,4 +1,3 @@
- 
 #!/usr/bin/env python
 
 #######################################################
@@ -55,11 +54,12 @@ class Planet():
        
 class Star():
     """Star is a class to represent a solar system. It will comprise one star and a random number of instances of 'Planet'"""
-    def __init__(self,name,bbox):
+    def __init__(self,name,pvtname,bbox):
         self.NumPlanets = random.randint(1,12)
         self.PlanetList = [Planet() for i in range(0,self.NumPlanets)]
         # Set Planet() atts by starname.PlanetList[i].method() ...
-        self.name = name
+        self.Name = name
+        self.pvtname = pvtname
         self.StarType = random.randint(1,4)
         self.Coordinates = (random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]))
         self.IsAlienSystem = 0
@@ -75,7 +75,7 @@ class Star():
         return(len(self.PlanetList))
        
     def GetSystemName(self):
-        return(self.name)
+        return(self.Name)
    
     def SetNumberofPlanets(self,NumPlanets):
         # in case there's any reason to change these...
@@ -87,7 +87,7 @@ class Star():
         # Maybe use this to set red/white dwarf, main sequence, etc...
         # Or just leave them all the same...
         pass
-    
+   
     def StoreDistances(self,StarList):
         j=0
         self.DistanceList = []
@@ -95,38 +95,43 @@ class Star():
             self.DistanceList.append([(sum((star.Coordinates[i] - self.Coordinates[i])**2 for i in range(0,3)))**0.5,j,star])
             self.DistanceList = sorted(self.DistanceList)
             j+=1
-            
+           
     def GetDistances(self):
         return(self.DistanceList)
-        
+       
     def SetInhabitants(self,name,basetype):
         self.IsAlienSystem = 1
         self.InhabitantName = name
         self.BaseType = basetype
-        
+       
     def Probe(self):
+        self.Name = self.pvtname
         i=0
         resinfo = []
         for planet in self.PlanetList:
-            resinfo.append(['%s %i' % (self.name, i), planet.GetResourceList()])
+            resinfo.append(['%s %i' % (self.Name, i), planet.GetResourceList()])
             i+=1
-            
+           
         if self.IsAlienSystem == 0:
             return(resinfo)
         else:
             return('%s %s') % (self.InhabitantName, self.BaseType)
-                
+               
 class GalaxyChunk():
    
     """GalaxyChunk is a section of space explorable by the player. It is not representative of any part of the Milky Way,
     because it's a lot easier to generate a random collection of stars than it would be to put them all in the right places."""
    
-    def __init__(self):
+    def __init__(self,fname):
         bbox = ((-5000,-5000,-5000),(5000,5000,5000))       # The galaxy chunk is bounded by a 10,000 light year cube
-        self.Earth = (0,0,0)                                            # Earth, of course, is the reference point within the cube.
+        self.Earth = Star('Sol','Sol',((0,0,0),(0,0,0)))                      # Earth, of course, is the reference point within the cube.
+        self.Earth.NumPlanets = 9
         self.numStars = 150                                             # Number of stars to fill the void with
-       
-        self.StarList = [ Star('test',bbox) for i in range(0,self.numStars) ]
+        f1 = open(fname,'r')
+        starNames = f1.readlines()
+        f1.close()
+       # starNames = random.shuffle(starNames)
+        self.StarList = [ Star('Unknown System',starNames[i].strip(),bbox) for i in range(0,self.numStars) ]
         self.TotalNumPlanets = sum(self.StarList[i].GetNumPlanets() for i in range(0,self.numStars))
         self.SeedStarList()
    
@@ -172,10 +177,4 @@ class GalaxyChunk():
                     samp_range -= set((5,0))
                 luckynum = random.sample(samp_range,1)[0]
                 self[i][j].SetResource(resdict[luckynum])
-
-
-
-                   
- 
-           
 
