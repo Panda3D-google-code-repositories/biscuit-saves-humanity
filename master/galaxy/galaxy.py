@@ -115,7 +115,8 @@ class Star():
         if self.IsAlienSystem == 0:
             return(resinfo)
         else:
-            return('%s %s') % (self.InhabitantName, self.BaseType)
+            self.Name ='%s %s' % (self.InhabitantName, self.BaseType)
+            return(self.Name)
                
 class GalaxyChunk():
    
