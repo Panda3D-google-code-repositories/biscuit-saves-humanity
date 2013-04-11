@@ -16,6 +16,8 @@ even pygame (to start). That way we can wrap whatever graphics we want around a 
 import random
 import time
 
+
+
 class Planet():
     """Planet represents a single planet member of a solar system."""
     def __init__(self):
@@ -26,31 +28,42 @@ class Planet():
         self.Water=0
         self.Silicon=0
         self.Inhabitable=0
-        self.Size=1
+        self.Size=random.randint(1,1000) # Call 2 the size of earth ... over 100 -> gas giant
+        self.Dilithium=0
        
     def SetPlanetSize(self,PlanetSize):
         self.Size=PlanetSize
        
     def SetResource(self,resource):
+        
+        if self.Size >= 100:
+            self.Type = 'Gas Giant'
+        if self.Size <= 10 and random.randint(1,10) <= 7:
+            self.Inhabitable = 1
+            self.Type = 'Class M'
+            return(1)
        
         if resource == 'Hydrocarbons':
-            self.Hydrocarbons = (random.randint(1,10))
+            self.Hydrocarbons = (random.randint(50,200))
         elif resource == 'Titanium':
-            self.Titanium = (random.randint(1,10))
+            self.Titanium = (random.randint(10,50))
         elif resource == 'Uranium':
             self.Uranium = (random.randint(1,10))            
         elif resource == 'Water':
-            self.Water = (random.randint(1,10))
+            self.Water = (random.randint(100,1000))
         elif resource == 'Silicon':
-            self.Silicon = (random.randint(1,10))
+            self.Silicon = (random.randint(10,150))
         elif resource == 'Inhabitable':
             self.Inhabitable = 1
+        elif resource == 'Dilithium':
+            self.Dilithium = (random.randint(1,10))
        
         else:
             pass
+        return(0)
        
     def GetResourceList(self):
-        return(('Uranium',self.Uranium,'Titanium',self.Titanium,'Water',self.Water,'Hydrocarbons',self.Hydrocarbons,'Silicon',self.Silicon,'Inhabitable', self.Inhabitable))
+        return([['Uranium',self.Uranium],['Titanium',self.Titanium],['Water',self.Water],['Hydrocarbons',self.Hydrocarbons],['Silicon',self.Silicon],['Dilithium',self.Dilithium],['Inhabitable', self.Inhabitable]])
        
 class Star():
     """Star is a class to represent a solar system. It will comprise one star and a random number of instances of 'Planet'"""
@@ -75,7 +88,7 @@ class Star():
         return(len(self.PlanetList))
        
     def GetSystemName(self):
-        return(self.Name)
+        return(self.Name+' System')
    
     def SetNumberofPlanets(self,NumPlanets):
         # in case there's any reason to change these...
@@ -117,6 +130,22 @@ class Star():
         else:
             self.Name ='%s %s' % (self.InhabitantName, self.BaseType)
             return(self.Name)
+            
+    def Harvest(self):
+        Uranium=Titanium=Water=Hydrocarbons=Silicon=Dilithium=Inhabitable = 0
+        
+        for planet in self.PlanetList:
+            
+            Uranium+= planet.Uranium
+            Titanium+= planet.Titanium
+            Water+= planet.Water
+            Hydrocarbons+= planet.Hydrocarbons
+            Silicon+= planet.Silicon
+            Dilithium+= planet.Dilithium
+            Inhabitable+= planet.Inhabitable
+            planet.Uranium=planet.Titanium=planet.Water=planet.Hydrocarbons=planet.Silicon=planet.Dilithium=planet.Inhabitable = 0
+            
+        return(Uranium,Titanium,Water,Hydrocarbons,Silicon,Dilithium,Inhabitable)
                
 class GalaxyChunk():
    
@@ -131,7 +160,7 @@ class GalaxyChunk():
         f1 = open(fname,'r')
         starNames = f1.readlines()
         f1.close()
-       # starNames = random.shuffle(starNames)
+        random.shuffle(starNames)
         self.StarList = [ Star('Unknown System',starNames[i].strip(),bbox) for i in range(0,self.numStars) ]
         self.TotalNumPlanets = sum(self.StarList[i].GetNumPlanets() for i in range(0,self.numStars))
         self.SeedStarList()
@@ -142,7 +171,7 @@ class GalaxyChunk():
     def SeedStarList(self):
         """ This method seeds the planet instances with resources"""
        
-        resdict = {1: 'Inhabitable', 2: 'Uranium', 3: 'Water', 4: 'Titanium', 5: 'Hydrocarbons', 6: 'Silicon'}
+        resdict = {1: 'Inhabitable', 2: 'Uranium', 3: 'Water', 4: 'Titanium', 5: 'Hydrocarbons', 6: 'Silicon', 7:'Dilithium'}
        
         InhabitablePlanets = []
         UraniumPlanets = []
@@ -151,31 +180,45 @@ class GalaxyChunk():
         HydrocarbonPlanets = []
         SiliconPlanets = []
        
-        numInhabitablePlanets = self.numStars / 30
+        numInhabitablePlanets = 10
         numUraniumPlanets = self.numStars / 4
         numTitaniumPlanets = self.numStars / 2
         numWaterPlanets = self.numStars
         numHydrocarbonPlanets = self.numStars / 2
         numSiliconPlanets = self.numStars
+        numDilithiumPlanets = self.numStars / 4
        
-        samp_range = set((1,2,3,4,5))
-       
+        samp_range = set((2,3,4,5,6,7))
+        InhabitCount = 0
         for i in range(0,self.numStars):
             self[i].StoreDistances(self.StarList)
             for j in range(0,self[i].GetNumPlanets()):
                
-                if numInhabitablePlanets+numWaterPlanets+numHydrocarbonPlanets+numTitaniumPlanets+numUraniumPlanets+numSiliconPlanets == 0:
+                if numInhabitablePlanets+numWaterPlanets+numHydrocarbonPlanets+numTitaniumPlanets+numUraniumPlanets+numSiliconPlanets+numDilithiumPlanets == 0:
                     break
-                if numInhabitablePlanets == 0:
-                    samp_range -= set((1,0))
+                #if numInhabitablePlanets == 0:
+                    #samp_range -= set((1,0))
                 if numUraniumPlanets == 0:
                     samp_range -= set((2,0))
                 if numWaterPlanets == 0:
                     samp_range -= set((3,0))
                 if numTitaniumPlanets == 0:
                     samp_range -= set((4,0))
+                if numTitaniumPlanets == 0:
+                    samp_range -= ((5,0))
                 if numSiliconPlanets == 0:
-                    samp_range -= set((5,0))
-                luckynum = random.sample(samp_range,1)[0]
-                self[i][j].SetResource(resdict[luckynum])
+                    samp_range -= set((6,0))
+                if numDilithiumPlanets == 0:
+                    samp_range -= set((7,0))
+                luckynum = random.sample(samp_range,3)
+                
+                InhabitCount += self[i][j].SetResource(resdict[luckynum[0]])
+                InhabitCount += self[i][j].SetResource(resdict[luckynum[1]])
+                InhabitCount += self[i][j].SetResource(resdict[luckynum[2]])
+                
+        if InhabitCount < numInhabitablePlanets:
+            difference = numInhabitablePlanets - InhabitCount
+            seeds = random.sample(range(0,self.numStars),difference)
+            for i in difference:
+                g[i][0].Inhabitable = 1 #star will always have 1 planet
 
