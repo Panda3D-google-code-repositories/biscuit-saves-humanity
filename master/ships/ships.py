@@ -57,21 +57,26 @@ class CapitalShip():
     def WarpToSystem(self,System,WarpFactor):
         if WarpFactor > self.MaxWarp:
             print "Warp factor out of range of current capabilities"
-        else:    
-            distance = (sum((self.Coordinates[i] - System.Coordinates[i])**2 for i in range(0,3)))**0.5
-            gametimetaken = int((distance/WarpFactor**6.75)*12) # Time taken for trip in months
-            timetaken = int((distance/(WarpFactor**6.75)*5.76)) # Gives 30 s for crossing quadrant at w 3 
-            print 'Initializing warp engines'
-            self.CurrentWarpFactor = WarpFactor
-            time.sleep(1)
-            print 'Current velocity is warp %f' % (self.CurrentWarpFactor)
-            print 'Warping'
-            for i in range(0,timetaken):
-                print '.'
+        else:
+            while self.Fuel > 0 and self.Coordinates != System.Coordinates:
+                distance = (sum((self.Coordinates[i] - System.Coordinates[i])**2 for i in range(0,3)))**0.5
+                if self.Fuel - distance*self.WarpPowerConsumption < 0:
+                    print 'Not enough fuel for this trip'
+                    
+                gametimetaken = int((distance/WarpFactor**6.75)*12) # Time taken for trip in months
+                timetaken = int((distance/(WarpFactor**6.75)*5.76)) # Gives 30 s for crossing quadrant at w 3 
+                print 'Initializing warp engines'
+                self.CurrentWarpFactor = WarpFactor
                 time.sleep(1)
-            print 'Arriving at coordinates %s, %s' % (System.Coordinates, System.Name)
-            self.System = System
-            self.Coordinates = self.System.Coordinates
+                print 'Current velocity is warp %f' % (self.CurrentWarpFactor)
+                print 'Warping'
+                for i in range(0,timetaken):
+                    print '.'
+                    time.sleep(1)
+                print 'Arriving at coordinates %s, %s' % (System.Coordinates, System.Name)
+                self.System = System
+                self.Fuel -= distance * self.WarpPowerConsumption
+                self.Coordinates = self.System.Coordinates
             return(gametimetaken)   #Calling this function will advance the gametime by gametimetaken
             
     def AddEngine(self,Type):
