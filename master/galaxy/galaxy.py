@@ -20,7 +20,7 @@ import time
 
 class Planet():
     """Planet represents a single planet member of a solar system."""
-    def __init__(self):
+    def __init__(self,root):
        
         self.Uranium=0
         self.Titanium=0
@@ -30,6 +30,7 @@ class Planet():
         self.Inhabitable=0
         self.Size=random.randint(1,1000) # Call 2 the size of earth ... over 100 -> gas giant
         self.Dilithium=0
+        self.Model = root+'/models/planets/planet.egg'
        
     def SetPlanetSize(self,PlanetSize):
         self.Size=PlanetSize
@@ -67,16 +68,18 @@ class Planet():
        
 class Star():
     """Star is a class to represent a solar system. It will comprise one star and a random number of instances of 'Planet'"""
-    def __init__(self,name,pvtname,bbox):
+    def __init__(self,name,pvtname,bbox,root):
         self.NumPlanets = random.randint(1,12)
-        self.PlanetList = [Planet() for i in range(0,self.NumPlanets)]
+        self.PlanetList = [Planet(root) for i in range(0,self.NumPlanets)]
         # Set Planet() atts by starname.PlanetList[i].method() ...
         self.Name = name
+        self.Model = root+'/galaxy/models/stars/star.egg'
         self.pvtname = pvtname
         self.StarType = random.randint(1,4)
         self.Coordinates = (random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]))
         self.IsAlienSystem = 0
         self.Explored = 0
+        self.Size = random.randint(1,100)  # 25 = size of sun, why not?
        
     def __getitem__(self,i):
         # getitem to return a specific 'planet' instance
@@ -152,16 +155,16 @@ class GalaxyChunk():
     """GalaxyChunk is a section of space explorable by the player. It is not representative of any part of the Milky Way,
     because it's a lot easier to generate a random collection of stars than it would be to put them all in the right places."""
    
-    def __init__(self,fname):
+    def __init__(self,root):
         bbox = ((-5000,-5000,-5000),(5000,5000,5000))       # The galaxy chunk is bounded by a 10,000 light year cube
-        self.Earth = Star('Sol','Sol',((0,0,0),(0,0,0)))                      # Earth, of course, is the reference point within the cube.
+        self.Earth = Star('Sol','Sol',((0,0,0),(0,0,0)),root)                      # Earth, of course, is the reference point within the cube.
         self.Earth.NumPlanets = 9
         self.numStars = 150                                             # Number of stars to fill the void with
-        f1 = open(fname,'r')
+        f1 = open(root+'/galaxy/StarNames.stars','r')
         starNames = f1.readlines()
         f1.close()
         random.shuffle(starNames)
-        self.StarList = [ Star('Unknown System',starNames[i].strip(),bbox) for i in range(0,self.numStars) ]
+        self.StarList = [ Star('Unknown System',starNames[i].strip(),bbox,root) for i in range(0,self.numStars) ]
         self.TotalNumPlanets = sum(self.StarList[i].GetNumPlanets() for i in range(0,self.numStars))
         self.SeedStarList()
    
@@ -219,6 +222,8 @@ class GalaxyChunk():
         if InhabitCount < numInhabitablePlanets:
             difference = numInhabitablePlanets - InhabitCount
             seeds = random.sample(range(0,self.numStars),difference)
-            for i in difference:
-                g[i][0].Inhabitable = 1 #star will always have 1 planet
-
+            try:
+                for i in difference:
+                    g[i][0].Inhabitable = 1 #star will always have 1 planet
+            except:
+                pass
