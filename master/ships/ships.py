@@ -8,7 +8,7 @@
 #
 #######################################################
 
-import components, time
+import components, time, os
 
 class Fighter():
     pass
@@ -28,7 +28,7 @@ class CapitalShip():
             WarpEngines = 1
             enginetype = 'EM'
             coretype = 'Nuclear'
-        self.Model = root + '/ships/models/ships/fighter.egg'    
+        self.Model = os.path.join(root,'ships/models/ships/fighter.egg')    
         self.Class = VesselClass
         self.MaxFighters = fighters
         self.Fighters = [ Fighter() for i in range(0,self.MaxFighters) ]

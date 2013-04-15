@@ -14,7 +14,7 @@ tracking of the player location, as well as ship configuration, etc. Graphics ca
 even pygame (to start). That way we can wrap whatever graphics we want around a complete game. """
 
 import random
-import time
+import time, os
 
 
 
@@ -30,7 +30,7 @@ class Planet():
         self.Inhabitable=0
         self.Size=random.randint(1,1000) # Call 2 the size of earth ... over 100 -> gas giant
         self.Dilithium=0
-        self.Model = root+'/models/planets/planet.egg'
+        self.Model = os.path.join(root,'models/planets/planet.egg')
        
     def SetPlanetSize(self,PlanetSize):
         self.Size=PlanetSize
@@ -73,13 +73,15 @@ class Star():
         self.PlanetList = [Planet(root) for i in range(0,self.NumPlanets)]
         # Set Planet() atts by starname.PlanetList[i].method() ...
         self.Name = name
-        self.Model = root+'/galaxy/models/stars/star.egg'
+        self.Model = os.path.join(root,'galaxy/models/stars/star.egg')
         self.pvtname = pvtname
         self.StarType = random.randint(1,4)
         self.Coordinates = (random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]))
         self.IsAlienSystem = 0
         self.Explored = 0
-        self.Size = random.randint(1,100)  # 25 = size of sun, why not?
+        self.Size = random.randint(1,100) #*(1.47031956e-7/25.0)  # 25 = size of sun, why not?
+                                                                # 1.470315956e-7 = diameter of sun in ly
+                                                                
        
     def __getitem__(self,i):
         # getitem to return a specific 'planet' instance
@@ -157,10 +159,11 @@ class GalaxyChunk():
    
     def __init__(self,root):
         bbox = ((-5000,-5000,-5000),(5000,5000,5000))       # The galaxy chunk is bounded by a 10,000 light year cube
-        self.Earth = Star('Sol','Sol',((0,0,0),(0,0,0)),root)                      # Earth, of course, is the reference point within the cube.
-        self.Earth.NumPlanets = 9
+        self.Sol = Star('Sol','Sol',((0,0,0),(0,0,0)),root)                      # Earth, of course, is the reference point within the cube.
+        self.Sol.NumPlanets = 9
+        self.Sol.Size = 25 #1.47031956e-7
         self.numStars = 150                                             # Number of stars to fill the void with
-        f1 = open(root+'/galaxy/StarNames.stars','r')
+        f1 = open(os.path.join(root,'galaxy/StarNames.stars'),'r')
         starNames = f1.readlines()
         f1.close()
         random.shuffle(starNames)
