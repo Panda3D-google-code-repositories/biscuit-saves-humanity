@@ -31,7 +31,7 @@ class Planet():
         self.Inhabitable=0
         self.Size=random.randint(1,1000) # Call 2 the size of earth ... over 100 -> gas giant
         self.Dilithium=0
-        self.Model = os.path.join(root,'models','planets','planet.egg')
+        self.Model = os.path.join(root,'models/planets/planet.egg')
        
     def SetPlanetSize(self,PlanetSize):
         self.Size=PlanetSize
@@ -74,7 +74,7 @@ class Star():
         self.PlanetList = [Planet(root) for i in range(0,self.NumPlanets)]
         # Set Planet() atts by starname.PlanetList[i].method() ...
         self.Name = name
-        self.Model = os.path.join(root,'galaxy','models','stars','star.egg')
+        self.Model = os.path.join(root,'galaxy/models/stars/star.egg')
         self.pvtname = pvtname
         self.StarType = random.randint(1,4)
         self.Coordinates = (random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]),random.randint(bbox[0][0],bbox[1][0]))
@@ -164,7 +164,7 @@ class GalaxyChunk():
         self.Sol.NumPlanets = 9
         self.Sol.Size = 25 #1.47031956e-7
         self.numStars = 150                                             # Number of stars to fill the void with
-        f1 = open(os.path.join(root,'galaxy','StarNames.stars'),'r')
+        f1 = open(os.path.join(root,'galaxy/StarNames.stars'),'r')
         starNames = f1.readlines()
         f1.close()
         random.shuffle(starNames)
