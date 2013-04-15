@@ -74,8 +74,8 @@ class BiscuitRun(ShowBase):
         self.ship = self.loader.loadModel(ship.Model)
         self.ship.reparentTo(self.sol)
         self.ship.setScale(1e-2,1e-2,1e-2)
-        self.ship.setPos(-1,-1,0)
-        self.camera.setPos(-1,-1,0.1)
+        self.ship.setPos(-2.75,-2.75,0)
+        self.camera.setPos(-2.75,-2.75,0.1)
         
         ambientNP = self.sol.attachNewNode(ambient)
         
