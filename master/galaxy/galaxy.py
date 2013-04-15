@@ -9,6 +9,7 @@
 #######################################################
 
 
+
 """This is the main portion of the code. I think that what I want is for this file to handle generation of the gamespace and
 tracking of the player location, as well as ship configuration, etc. Graphics can be overlayed on top of this using Panda3D or
 even pygame (to start). That way we can wrap whatever graphics we want around a complete game. """

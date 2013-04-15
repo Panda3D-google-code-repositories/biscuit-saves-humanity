@@ -6,6 +6,7 @@
 #
 #######################################################
 
+
 class PowerPlant():
     def __init__(self,Type):
         """ PowerPlant is the power center of the vessel. It limits what the WarpEngines can do """

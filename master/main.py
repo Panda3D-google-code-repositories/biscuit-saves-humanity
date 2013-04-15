@@ -12,7 +12,7 @@ import sys, os
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 
-root = os.getcwd()
+root = './'
 
 sys.path.append(os.path.join(root,'rendering'))
 sys.path.append(os.path.join(root,'bases'))

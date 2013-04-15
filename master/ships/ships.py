@@ -8,6 +8,7 @@
 #
 #######################################################
 
+
 import components, time, os
 
 class Fighter():
