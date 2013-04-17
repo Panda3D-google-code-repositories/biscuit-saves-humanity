@@ -47,8 +47,54 @@ class WarpEngine():
         self.PowerRequirementPerLY = ( 7000 / (1+self.Efficiency) )
         self.PowerConsumption = self.PowerRequirementPerLY
                                                                                                        
-       
-        # Diminishing returns on power consumption : WarpFactor ... shit... this needs to be in the Ship() class as well...
 
 class MainComputer():
+    """Do we need this? I'm thinking not, but leaving it just in case"""
     pass
+
+class Thruster():
+    """ Fuel-less propulsion within systems """
+    def __init__(self,Type):
+        if Type == 'Standard':
+            self.Power = 1
+        elif Type == 'Turbo':
+            self.Power = 2
+        else:
+            pass
+
+class Wiring():
+    """Penalty for using easier to find wiring"""
+    def __init__(self,Type):
+        if Type == 'Standard':
+            self.Efficiency = 0.5
+        elif Type == 'Superconducting':
+            self.Efficiency = 1.0
+        else:
+            pass
+            
+        
+
+class Blaster():
+    """Self explanatory"""
+    def __init__(self,Type):
+        if Type == 'Standard':
+            self.Power = 1
+        elif Type == 'Phasor':
+            self.Power = 2
+        elif Type == 'Neutrino':
+            self.Power = 3
+        else:
+            pass
+
+class Accelerator():
+    """Boosts the attributes of components that it is installed next to"""
+    def __init__():
+        if Type == 'Standard':
+            self.Boost = 1.1
+        elif Type == 'Turbo':
+            self.Boost = 1.2
+        elif Type == 'Relativistic':
+            self.Boost = 1.3
+        else:
+            pass
+        

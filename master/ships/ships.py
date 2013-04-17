@@ -12,8 +12,28 @@
 import components, time, os
 
 class Fighter():
-    pass
-
+    def __init__(self):
+        self.MaxSpeed = 7
+        self.CurrentSpeed = 0
+        self.Blasters = [ components.Blaster('Standard') for i in range(0,2) ]
+        self.HitPoints = 10
+        
+    def SetThrusters(self,increment):
+        if self.CurrentThrusterSpeed + increment <= self.MaxThrusterSpeed:
+            self.CurrentThrusterSpeed+=increment
+            return(self.CurrentThrusterSpeed)
+        else:
+            print 'Thrusters are already operating at 100%'
+            return(self.CurrentThrusterSpeed)
+            
+    def Hit(self,hitpoints):
+        self.HitPoints -= hitpoints
+        if self.HitPoints <= 0:
+            return('Destroyed')
+            del self
+        else:
+            return(self.HitPoints)
+            
 class CapitalShip():
     def __init__(self, VesselClass, root):
         if VesselClass == 'Explorer':  
@@ -29,6 +49,14 @@ class CapitalShip():
             WarpEngines = 1
             enginetype = 'EM'
             coretype = 'Nuclear'
+            Thrusters = 2
+            ThrusterType = 'Standard'
+            Blasters = 2
+            BlasterType = 'Standard'
+            Accelerators = 0
+            Wiring = 5
+            HitPoints = 100
+            
         self.Model = os.path.join(root,'ships/models/ships/fighter.egg')    
         self.Class = VesselClass
         self.MaxFighters = fighters
@@ -55,8 +83,11 @@ class CapitalShip():
         self.CurrentWarpFactor = 0
         self.Coordinates = (10,10,10)
         
-        self.MaxThrusterSpeed = 1.0 # Need to add thrusters into components. Make it 1-10, with 1 being 1/100 ly per second... the scalings already way screwed so who cares.
+        self.Thrusters = [ components.Thruster('Standard') for i in range(0,Thrusters) ]
+        self.MaxThrusterSpeed = sum((self.Thrusters[i].Power for i in range(0,Thrusters)))
         self.CurrentThrusterSpeed = 0.0
+        
+        self.Wiring = [ components.Wiring('Standard') for i in range(0,Wiring) ]
         
     def SetThrusters(self,increment):
         if self.CurrentThrusterSpeed + increment <= self.MaxThrusterSpeed:
@@ -105,11 +136,16 @@ class CapitalShip():
             else:
                 self.WarpEngines.append(components.WarpEngine(Type))
                 self.NumWarpEngines = len(self.WarpEngines)
-                success = 1
-                
+                success = 1     
         self.MaxWarp = (0.5*(sum(self.PowerPlants[i].Output for i in range(0,self.NumPowerPlants)))**0.25 + self.NumWarpEngines)*(self.WarpEngines[0].Efficiency+self.NumWarpEngines/20.) 
 
-                   
+    def Hit(self,hitpoints):
+        self.HitPoints -= hitpoints
+        if self.HitPoints <= 0:
+            return('Destroyed')
+            del self
+        else:
+            return(self.HitPoints)                   
             
 
 
